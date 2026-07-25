@@ -6,10 +6,18 @@ Falls back to a rule-based summary when no API key is set.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import pandas as pd
 from utils.config import get_config
+
+_log = logging.getLogger(__name__)
+
+
+def _warn(exc: Exception) -> None:
+    """Log an LLM error and let the caller fall through to the rule-based path."""
+    _log.warning("LLM call failed (%s: %s) — using rule-based fallback.", type(exc).__name__, exc)
 
 
 def _llm_available() -> bool:
@@ -19,12 +27,18 @@ def _llm_available() -> bool:
 def _call_llm(system: str, user: str) -> str:
     from openai import OpenAI  # lazy import so app works without openai installed
 
+    model = get_config("LLM_MODEL", "gpt-4o-mini")
+    if not model:
+        raise ValueError(
+            "LLM_MODEL is not set. Add it to your .env or Streamlit secrets."
+        )
+
     client = OpenAI(
         api_key=get_config("OPENAI_API_KEY"),
         base_url=get_config("OPENAI_BASE_URL", "https://api.openai.com/v1"),
     )
     response = client.chat.completions.create(
-        model=get_config("LLM_MODEL", "gpt-4o-mini"),
+        model=model,
         messages=[
             {"role": "system", "content": system},
             {"role": "user",   "content": user},
@@ -41,29 +55,32 @@ def _call_llm(system: str, user: str) -> str:
 
 def get_spending_personality(df: pd.DataFrame, summary: dict[str, Any]) -> str:
     if _llm_available():
-        top_cats = (
-            df.groupby("Category")["Amount"]
-            .sum()
-            .sort_values(ascending=False)
-            .head(3)
-            .to_dict()
-        )
-        user_msg = (
-            f"Total spending: ${summary['total_spend']}. "
-            f"Top categories: {top_cats}. "
-            f"Weekend spend: ${summary['weekend_spend']}, "
-            f"Weekday spend: ${summary['weekday_spend']}. "
-            f"Average transaction: ${summary['avg_txn']}. "
-            f"Total transactions: {summary['total_txns']}."
-        )
-        return _call_llm(
-            system=(
-                "You are a concise financial analyst. "
-                "In 2–3 sentences, describe the user's spending personality "
-                "based on their expense data. Be direct and insightful."
-            ),
-            user=user_msg,
-        )
+        try:
+            top_cats = (
+                df.groupby("Category")["Amount"]
+                .sum()
+                .sort_values(ascending=False)
+                .head(3)
+                .to_dict()
+            )
+            user_msg = (
+                f"Total spending: ${summary['total_spend']}. "
+                f"Top categories: {top_cats}. "
+                f"Weekend spend: ${summary['weekend_spend']}, "
+                f"Weekday spend: ${summary['weekday_spend']}. "
+                f"Average transaction: ${summary['avg_txn']}. "
+                f"Total transactions: {summary['total_txns']}."
+            )
+            return _call_llm(
+                system=(
+                    "You are a concise financial analyst. "
+                    "In 2–3 sentences, describe the user's spending personality "
+                    "based on their expense data. Be direct and insightful."
+                ),
+                user=user_msg,
+            )
+        except Exception as exc:
+            _warn(exc)
 
     # Rule-based fallback
     top_cat = summary.get("top_category", "various categories")
@@ -87,20 +104,23 @@ def get_spending_personality(df: pd.DataFrame, summary: dict[str, Any]) -> str:
 
 def get_spending_insights(df: pd.DataFrame, summary: dict[str, Any]) -> list[str]:
     if _llm_available():
-        monthly_data = summary["monthly"].to_dict(orient="records")
-        cat_data = summary["by_category"].head(5).to_dict(orient="records")
-        raw = _call_llm(
-            system=(
-                "You are a financial analyst. Return exactly 4 bullet-point insights "
-                "about the user's spending. Each insight should be one sentence starting with '- '."
-            ),
-            user=(
-                f"Monthly data: {monthly_data}. "
-                f"Category breakdown: {cat_data}. "
-                f"Weekend vs weekday: ${summary['weekend_spend']} vs ${summary['weekday_spend']}."
-            ),
-        )
-        return [line.strip()[2:].strip() for line in raw.splitlines() if line.strip().startswith("- ")]
+        try:
+            monthly_data = summary["monthly"].to_dict(orient="records")
+            cat_data = summary["by_category"].head(5).to_dict(orient="records")
+            raw = _call_llm(
+                system=(
+                    "You are a financial analyst. Return exactly 4 bullet-point insights "
+                    "about the user's spending. Each insight should be one sentence starting with '- '."
+                ),
+                user=(
+                    f"Monthly data: {monthly_data}. "
+                    f"Category breakdown: {cat_data}. "
+                    f"Weekend vs weekday: ${summary['weekend_spend']} vs ${summary['weekday_spend']}."
+                ),
+            )
+            return [line.strip()[2:].strip() for line in raw.splitlines() if line.strip().startswith("- ")]
+        except Exception as exc:
+            _warn(exc)
 
     # Rule-based fallback
     insights = []
@@ -132,16 +152,19 @@ def get_spending_insights(df: pd.DataFrame, summary: dict[str, Any]) -> list[str
 
 def get_saving_recommendations(df: pd.DataFrame, summary: dict[str, Any]) -> list[str]:
     if _llm_available():
-        cat_data = summary["by_category"].to_dict(orient="records")
-        raw = _call_llm(
-            system=(
-                "You are a personal finance coach. Return exactly 3 actionable saving "
-                "recommendations based on the spending data. "
-                "Each should be one sentence starting with '- '."
-            ),
-            user=f"Spending by category: {cat_data}. Total spend: ${summary['total_spend']}.",
-        )
-        return [line.strip()[2:].strip() for line in raw.splitlines() if line.strip().startswith("- ")]
+        try:
+            cat_data = summary["by_category"].to_dict(orient="records")
+            raw = _call_llm(
+                system=(
+                    "You are a personal finance coach. Return exactly 3 actionable saving "
+                    "recommendations based on the spending data. "
+                    "Each should be one sentence starting with '- '."
+                ),
+                user=f"Spending by category: {cat_data}. Total spend: ${summary['total_spend']}.",
+            )
+            return [line.strip()[2:].strip() for line in raw.splitlines() if line.strip().startswith("- ")]
+        except Exception as exc:
+            _warn(exc)
 
     # Rule-based fallback
     recs = []
@@ -164,19 +187,22 @@ def get_saving_recommendations(df: pd.DataFrame, summary: dict[str, Any]) -> lis
 
 def get_goal_plan(goal: str, df: pd.DataFrame, summary: dict[str, Any]) -> str:
     if _llm_available():
-        return _call_llm(
-            system=(
-                "You are a practical financial planner. "
-                "Given the user's current spending data and their savings goal, "
-                "create a concise, realistic 3-step action plan (4–6 sentences total)."
-            ),
-            user=(
-                f"Savings goal: {goal}. "
-                f"Monthly spend: ${summary['total_spend']}. "
-                f"Top category: {summary['top_category']}. "
-                f"Category breakdown: {summary['by_category'].head(5).to_dict(orient='records')}."
-            ),
-        )
+        try:
+            return _call_llm(
+                system=(
+                    "You are a practical financial planner. "
+                    "Given the user's current spending data and their savings goal, "
+                    "create a concise, realistic 3-step action plan (4–6 sentences total)."
+                ),
+                user=(
+                    f"Savings goal: {goal}. "
+                    f"Monthly spend: ${summary['total_spend']}. "
+                    f"Top category: {summary['top_category']}. "
+                    f"Category breakdown: {summary['by_category'].head(5).to_dict(orient='records')}."
+                ),
+            )
+        except Exception as exc:
+            _warn(exc)
 
     amount_str = "".join(c for c in goal if c.isdigit() or c == ".")
     target = float(amount_str) if amount_str else 500
@@ -205,20 +231,28 @@ def generate_memory_snapshot(
 ) -> str:
     month_label = df["Month"].mode()[0] if not df["Month"].mode().empty else "N/A"
 
+    key_insight    = None
+    recommendation = None
+
     if _llm_available():
-        key_insight = _call_llm(
-            system="Return a single impactful sentence summarising the user's biggest financial insight.",
-            user=(
-                f"Top category: {summary['top_category']} "
-                f"({summary['by_category'].iloc[0]['Amount'] / summary['total_spend'] * 100:.0f}% of spend). "
-                f"Insights: {insights[:2]}."
-            ),
-        )
-        recommendation = _call_llm(
-            system="Return a single actionable recommendation sentence for this user.",
-            user=f"Recommendations: {recommendations}. Top category: {summary['top_category']}.",
-        )
-    else:
+        try:
+            key_insight = _call_llm(
+                system="Return a single impactful sentence summarising the user's biggest financial insight.",
+                user=(
+                    f"Top category: {summary['top_category']} "
+                    f"({summary['by_category'].iloc[0]['Amount'] / summary['total_spend'] * 100:.0f}% of spend). "
+                    f"Insights: {insights[:2]}."
+                ),
+            )
+            recommendation = _call_llm(
+                system="Return a single actionable recommendation sentence for this user.",
+                user=f"Recommendations: {recommendations}. Top category: {summary['top_category']}.",
+            )
+        except Exception as exc:
+            _warn(exc)
+            key_insight    = None
+            recommendation = None
+    if not _llm_available() or key_insight is None:
         pct = summary["by_category"].iloc[0]["Amount"] / summary["total_spend"] * 100
         key_insight = (
             f"{summary['top_category']} expenses account for {pct:.0f}% of monthly spending."
