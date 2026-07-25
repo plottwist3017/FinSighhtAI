@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-/// @title SpendSenseMemory
-/// @notice Stores hashed financial memory snapshots on-chain.
-/// @dev    No raw financial data is ever stored — only SHA-256 hashes.
-contract SpendSenseMemory {
+/// @title FinSightAI
+/// @notice Stores hashed financial memory snapshots on-chain. No raw financial data is ever stored.
+/// @dev    Built using IBM Bob · Made by Kavya Raval
+contract FinSightAI {
     struct Snapshot {
         bytes32 snapshotHash;
         string  month;
         uint256 timestamp;
     }
 
-    // wallet address => list of that wallet's snapshots
+    // wallet => list of snapshots
     mapping(address => Snapshot[]) private snapshots;
 
     event SnapshotSaved(
@@ -22,21 +22,19 @@ contract SpendSenseMemory {
     );
 
     /// @notice Save a new financial memory snapshot.
-    /// @param snapshotHash  SHA-256 hash of the snapshot text (as bytes32)
-    /// @param month         Human-readable month label, e.g. "July 2026"
+    /// @param snapshotHash SHA-256 hash of the snapshot text (as bytes32)
+    /// @param month        Human-readable month label, e.g. "July 2026"
     function saveSnapshot(bytes32 snapshotHash, string calldata month) external {
-        snapshots[msg.sender].push(Snapshot({
+        Snapshot memory snap = Snapshot({
             snapshotHash: snapshotHash,
             month:        month,
             timestamp:    block.timestamp
-        }));
+        });
+        snapshots[msg.sender].push(snap);
         emit SnapshotSaved(msg.sender, snapshotHash, month, block.timestamp);
     }
 
     /// @notice Return all snapshots belonging to the caller.
-    /// @return hashes      Array of SHA-256 hashes
-    /// @return months      Array of month labels
-    /// @return timestamps  Array of block timestamps
     function getSnapshots()
         external
         view

@@ -1,8 +1,10 @@
-# SpendSense Memory 🧠
+# FinSight AI 💡
 
 **AI-powered financial intelligence on Monad Testnet**
 
-SpendSense Memory transforms raw expense data into meaningful financial insights, then permanently records monthly Financial Memory Snapshots on the Monad Testnet blockchain.
+> Built using IBM Bob · Made by Kavya Raval
+
+FinSight AI transforms raw expense data into meaningful financial insights, then permanently records monthly Financial Memory Snapshots on the Monad Testnet blockchain.
 
 ---
 
@@ -22,7 +24,7 @@ SpendSense Memory transforms raw expense data into meaningful financial insights
 ### 1. Clone / enter the project
 
 ```bash
-cd spendsense-memory
+cd finsight-ai
 ```
 
 ### 2. Create a virtual environment
@@ -84,7 +86,7 @@ Blockchain features are **optional** and require:
 
 1. **Install web3:** `pip install web3`
 2. **Deploy the contract:**
-   - Open `blockchain/SpendSenseMemory.sol` in [Remix IDE](https://remix.ethereum.org)
+   - Open `blockchain/FinSightAI.sol` in [Remix IDE](https://remix.ethereum.org)
    - Connect MetaMask to Monad Testnet (Chain ID: 10143, RPC: `https://testnet-rpc.monad.xyz`)
    - Compile with Solidity `^0.8.19` and deploy
    - Copy the deployed contract address
@@ -118,7 +120,11 @@ Blockchain features are **optional** and require:
 │   └── ai_service.py         # LLM calls + rule-based fallbacks
 ├── blockchain/
 │   ├── blockchain_service.py # Web3 / Monad integration (optional)
-│   └── SpendSenseMemory.sol  # Solidity smart contract
+│   └── FinSightAI.sol        # Solidity smart contract
+├── finsight-ai/
+│   ├── app.py                # IBM watsonx.ai invoice tracker
+│   ├── doc_processing.py
+│   └── model_gateway.py
 ├── data/
 │   └── sample_expenses.csv   # Demo data
 ├── utils/
@@ -142,3 +148,7 @@ Only a **SHA-256 hash** of the snapshot text is stored on-chain — never any ra
 - **Data:** pandas, Plotly
 - **AI:** OpenAI API (gpt-4o-mini) with rule-based fallback
 - **Blockchain:** Solidity + Web3.py + Monad Testnet
+
+---
+
+*Built using IBM Bob · Made by Kavya Raval*

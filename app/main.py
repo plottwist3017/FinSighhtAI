@@ -1,5 +1,6 @@
 """
-FinSighht AI — Main Streamlit Application
+FinSight AI — Main Streamlit Application
+Built using IBM Bob · Made by Kavya Raval
 """
 
 from __future__ import annotations
@@ -37,7 +38,7 @@ from blockchain.blockchain_service import (
 # Page config
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="FinSighht AI",
+    page_title="FinSight AI",
     page_icon="💡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -244,7 +245,7 @@ st.markdown(
     f"""
     <div class="hero">
         <div class="hero-eyebrow">Powered by AI · Built on Monad</div>
-        <div class="hero-title">Fin<span>Sighht</span> AI</div>
+        <div class="hero-title">Fin<span>Sight</span> AI</div>
         <div class="hero-subtitle">
             An AI-Powered Financial Intelligence Platform
         </div>
@@ -255,6 +256,7 @@ st.markdown(
             <span class="hero-pill">🎯 Goal Planning</span>
         </div>
         <div><span class="hero-badge">{chain_dot} {chain_text}</span></div>
+        <div style="margin-top:10px;font-size:11px;color:#64748b;">Built using IBM Bob · Made by Kavya Raval</div>
     </div>
     """,
     unsafe_allow_html=True,

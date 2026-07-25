@@ -1,6 +1,7 @@
 """
 blockchain_service.py
-Handles Monad Testnet interactions for FinSighht AI.
+Handles Monad Testnet interactions for FinSight AI.
+Built using IBM Bob · Made by Kavya Raval
 
 web3 is an optional dependency — all imports are lazy so the app runs
 fine without it (blockchain features are simply disabled).

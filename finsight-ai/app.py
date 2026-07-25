@@ -11,8 +11,8 @@ from model_gateway import invoke_llm
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="AI Expense Tracker",
-    page_icon="🏛️",
+    page_title="FinSight AI",
+    page_icon="💡",
     layout="wide",
 )
 
@@ -203,11 +203,12 @@ def generate_summary(df: pd.DataFrame) -> str:
 st.markdown(
     """
     <div class="hero-banner">
-        <div class="hero-title">🏛️ AI Expense Tracker</div>
+        <div class="hero-title">💡 FinSight AI</div>
         <div class="hero-subtitle">
             Upload expense receipts and invoices — AI extracts, categorises, and analyses your spend automatically.
         </div>
         <span class="hero-badge">⚡ Powered by IBM watsonx.ai</span>
+        <div style="margin-top:0.75rem;font-size:0.72rem;color:#94a3b8;">Built using IBM Bob · Made by Kavya Raval</div>
     </div>
     """,
     unsafe_allow_html=True,
