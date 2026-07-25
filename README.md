@@ -1,154 +1,170 @@
 # FinSight AI 💡
 
-**AI-powered financial intelligence on Monad Testnet**
+## AI-Powered Financial Intelligence with Blockchain-Preserved Financial Memory
 
 > Built using IBM Bob · Made by Kavya Raval
 
-FinSight AI transforms raw expense data into meaningful financial insights, then permanently records monthly Financial Memory Snapshots on the Monad Testnet blockchain.
+FinSight AI transforms raw expense data into actionable financial insights using AI analytics, while creating a privacy-first financial history anchored on the Monad Testnet blockchain.
+
+Instead of only tracking expenses, FinSight AI helps users understand spending behaviour, receive personalized recommendations, and preserve their financial journey.
 
 ---
 
-## Features
+## 📸 Demo
+
+<!-- Add your project GIF / screenshots here -->
+
+![FinSight AI Demo](assets/demo.gif)
+
+---
+
+# ✨ Features
 
 | Feature | Description |
 |---|---|
-| 📤 **Upload** | Drag-and-drop CSV expense upload with validation |
-| 📊 **Dashboard** | Interactive Plotly charts — categories, merchants, trends |
-| 🤖 **AI Insights** | Spending personality, insights, recommendations & goal planner |
-| 🔗 **Financial Memory** | AI snapshot generation + optional Monad Testnet storage |
+| 📤 Expense Upload | Upload CSV transactions with automatic validation and categorization |
+| 📊 Smart Dashboard | Interactive analytics for spending categories, merchants, and trends |
+| 🤖 AI Insights | Spending personality, financial insights, recommendations, and goal planning |
+| 📄 Invoice Intelligence | Extract expense details from PDF receipts using IBM watsonx.ai |
+| 🔗 Financial Memory | Generate AI snapshots and securely anchor them on Monad Testnet |
 
 ---
 
-## Quick Start
+# 🚀 Quick Start
 
-### 1. Clone / enter the project
+### 1. Clone Repository
 
 ```bash
+git clone <repository-url>
 cd finsight-ai
 ```
 
-### 2. Create a virtual environment
+### 2. Create Environment
 
 ```bash
 python -m venv .venv
-# Windows
+```
+
+Activate:
+
+**Windows**
+```bash
 .venv\Scripts\activate
-# macOS / Linux
+```
+
+**Mac/Linux**
+```bash
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
+### 4. Configure Environment
 
-```bash
-cp .env.example .env
+Create `.env`:
+
+```env
+OPENAI_API_KEY=your_key_here
 ```
 
-Edit `.env` and add your OpenAI key:
+> The application includes AI fallbacks and can run without an API key.
 
-```
-OPENAI_API_KEY=sk-...
-```
-
-> The app works without an API key — a rule-based fallback generates insights automatically.
-
-### 5. Run the app
+### 5. Run Application
 
 ```bash
 streamlit run app/main.py
 ```
 
-Open [http://localhost:8501](http://localhost:8501) in your browser.
-
 ---
 
-## CSV Format
+# 🔄 How It Works
 
 ```
-Date,Merchant,Amount,Description
-2026-07-01,Starbucks,6.50,Coffee
-2026-07-02,Uber,18.00,Ride
-2026-07-05,Walmart,54.00,Groceries
+User Financial Data
+        ↓
+CSV Transactions / PDF Invoices
+        ↓
+Data Processing + AI Analysis
+        ↓
+Dashboards + Insights + Recommendations
+        ↓
+Financial Memory Snapshot
+        ↓
+Monad Testnet Blockchain
 ```
 
-A sample file is included at `data/sample_expenses.csv`.
+---
+
+# 🔗 Blockchain Integration
+
+FinSight AI uses a privacy-first blockchain approach.
+
+Instead of storing sensitive financial data on-chain:
+
+✅ AI creates a financial snapshot  
+✅ Snapshot is converted into a SHA-256 hash  
+✅ Only the hash is stored on Monad Testnet  
+
+No transaction details, amounts, or personal financial information are stored publicly.
 
 ---
 
-## Blockchain Integration (Monad Testnet)
+# 🛠️ Tech Stack
 
-Blockchain features are **optional** and require:
+**Frontend**
+- Streamlit
 
-1. **Install web3:** `pip install web3`
-2. **Deploy the contract:**
-   - Open `blockchain/FinSightAI.sol` in [Remix IDE](https://remix.ethereum.org)
-   - Connect MetaMask to Monad Testnet (Chain ID: 10143, RPC: `https://testnet-rpc.monad.xyz`)
-   - Compile with Solidity `^0.8.19` and deploy
-   - Copy the deployed contract address
-3. **Configure `.env`:**
-   ```
-   MONAD_RPC_URL=https://testnet-rpc.monad.xyz
-   CONTRACT_ADDRESS=0x...
-   PRIVATE_KEY=0x...
-   WALLET_ADDRESS=0x...
-   ```
+**Data & Visualization**
+- Python
+- pandas
+- Plotly
 
-### Monad Testnet Details
+**AI**
+- OpenAI API
+- IBM watsonx.ai
 
-| Field | Value |
-|---|---|
-| Network Name | Monad Testnet |
-| Chain ID | 10143 |
-| RPC URL | `https://testnet-rpc.monad.xyz` |
-| Explorer | `https://testnet.monadexplorer.com` |
-| Faucet | `https://faucet.monad.xyz` |
+**Blockchain**
+- Solidity
+- Web3.py
+- Monad Testnet
 
 ---
 
-## Project Structure
+# 📁 Project Structure
 
 ```
 ├── app/
-│   └── main.py               # Streamlit app (4 pages)
+│   └── main.py              # Main Streamlit application
 ├── services/
-│   ├── expense_service.py    # CSV parsing, categorisation, analytics
-│   └── ai_service.py         # LLM calls + rule-based fallbacks
+│   ├── expense_service.py   # Data processing & analytics
+│   └── ai_service.py        # AI insights & recommendations
 ├── blockchain/
-│   ├── blockchain_service.py # Web3 / Monad integration (optional)
-│   └── FinSightAI.sol        # Solidity smart contract
+│   ├── blockchain_service.py
+│   └── FinSightAI.sol       # Smart contract
 ├── finsight-ai/
-│   ├── app.py                # IBM watsonx.ai invoice tracker
+│   ├── app.py               # Invoice intelligence app
 │   ├── doc_processing.py
 │   └── model_gateway.py
 ├── data/
-│   └── sample_expenses.csv   # Demo data
-├── utils/
 ├── assets/
 ├── requirements.txt
-├── .env.example
 └── README.md
 ```
 
 ---
 
-## Privacy
+# 🌱 Future Improvements
 
-Only a **SHA-256 hash** of the snapshot text is stored on-chain — never any raw financial data.
-
----
-
-## Tech Stack
-
-- **Frontend:** Streamlit
-- **Data:** pandas, Plotly
-- **AI:** OpenAI API (gpt-4o-mini) with rule-based fallback
-- **Blockchain:** Solidity + Web3.py + Monad Testnet
+- Bank account integrations
+- Multi-month spending analysis
+- Predictive financial forecasting
+- Budget alerts
+- Financial milestone tracking
 
 ---
 
-*Built using IBM Bob · Made by Kavya Raval*
+Built using IBM Bob · Made by Kavya Raval · FinSight AI · 2026
