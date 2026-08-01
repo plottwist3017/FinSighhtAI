@@ -1,170 +1,121 @@
-# FinSight AI 💡
+# 💡 FinSight AI
 
-## AI-Powered Financial Intelligence with Blockchain-Preserved Financial Memory
+### AI-Powered Financial Intelligence with Secure Blockchain Memory
 
-> Built using IBM Bob · Made by Kavya Raval
+## 📌 Introduction
 
-FinSight AI transforms raw expense data into actionable financial insights using AI analytics, while creating a privacy-first financial history anchored on the Monad Testnet blockchain.
+FinSight AI is an AI-powered financial intelligence platform that transforms raw financial data into actionable insights. It combines data analytics, generative AI, and blockchain technology to help users understand spending behaviour, receive personalized recommendations, and preserve financial milestones securely.
 
-Instead of only tracking expenses, FinSight AI helps users understand spending behaviour, receive personalized recommendations, and preserve their financial journey.
+Unlike traditional expense trackers that only record transactions, FinSight AI analyzes financial patterns and creates meaningful insights while maintaining privacy through blockchain-backed verification.
 
 ---
 
-## 📸 Demo
+## 🎥 Demo
 
-<!-- Add your project GIF / screenshots here -->
+<!-- Add screenshots/demo GIF here -->
 
 ![FinSight AI Demo](Demo.gif)
 
 ---
 
-# ✨ Features
+# 🤔 Why FinSight AI?
 
-| Feature | Description |
-|---|---|
-| 📤 Expense Upload | Upload CSV transactions with automatic validation and categorization |
-| 📊 Smart Dashboard | Interactive analytics for spending categories, merchants, and trends |
-| 🤖 AI Insights | Spending personality, financial insights, recommendations, and goal planning |
-| 📄 Invoice Intelligence | Extract expense details from PDF receipts using IBM watsonx.ai |
-| 🔗 Financial Memory | Generate AI snapshots and securely anchor them on Monad Testnet |
+Managing finances is not just about tracking expenses — it is about understanding decisions and building better financial habits.
 
----
+FinSight AI addresses this by:
 
-# 🚀 Quick Start
-
-### 1. Clone Repository
-
-```bash
-git clone <repository-url>
-cd finsight-ai
-```
-
-### 2. Create Environment
-
-```bash
-python -m venv .venv
-```
-
-Activate:
-
-**Windows**
-```bash
-.venv\Scripts\activate
-```
-
-**Mac/Linux**
-```bash
-source .venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure Environment
-
-Create `.env`:
-
-```env
-OPENAI_API_KEY=your_key_here
-```
-
-> The application includes AI fallbacks and can run without an API key.
-
-### 5. Run Application
-
-```bash
-streamlit run app/main.py
-```
+- 📊 Turning raw transaction data into meaningful financial insights
+- 🤖 Providing AI-powered recommendations based on spending behaviour
+- 🔒 Creating secure financial memory without exposing sensitive data
+- 📈 Helping users make smarter, data-driven financial decisions
 
 ---
 
-# 🔄 How It Works
+# 🚀 Features
 
-```
+### 📤 Expense Analysis
+Upload transaction data and automatically analyze spending patterns.
+
+### 📄 Invoice Intelligence
+Extract financial information from invoices using AI-powered document processing.
+
+### 📊 Interactive Dashboard
+Visualize expenses through category breakdowns, merchant analysis, and spending trends.
+
+### 🤖 AI Financial Insights
+Generate personalized spending summaries, recommendations, financial personality insights, and goal planning.
+
+### 🔗 Blockchain Financial Memory
+Create financial snapshots and store cryptographic proofs securely on the Monad Testnet.
+
+---
+
+# ⚙️ How It Works
+
+```text
 User Financial Data
         ↓
-CSV Transactions / PDF Invoices
+CSV Transactions / Invoice Upload
         ↓
-Data Processing + AI Analysis
+Data Processing & Analytics
         ↓
-Dashboards + Insights + Recommendations
+AI-Powered Financial Insights
         ↓
-Financial Memory Snapshot
+Financial Memory Snapshot Generation
         ↓
-Monad Testnet Blockchain
+SHA-256 Hash Stored on Monad Testnet
 ```
 
----
+FinSight AI follows a privacy-first blockchain approach:
 
-# 🔗 Blockchain Integration
-
-FinSight AI uses a privacy-first blockchain approach.
-
-Instead of storing sensitive financial data on-chain:
-
-✅ AI creates a financial snapshot  
-✅ Snapshot is converted into a SHA-256 hash  
-✅ Only the hash is stored on Monad Testnet  
-
-No transaction details, amounts, or personal financial information are stored publicly.
+- Financial information stays off-chain
+- AI generates a financial snapshot
+- Snapshot is converted into a cryptographic hash
+- Only the hash is stored on-chain for verification
 
 ---
 
-# 🛠️ Tech Stack
+# 📂 Project Structure
 
-**Frontend**
-- Streamlit
-
-**Data & Visualization**
-- Python
-- pandas
-- Plotly
-
-**AI**
-- OpenAI API
-- IBM watsonx.ai
-
-**Blockchain**
-- Solidity
-- Web3.py
-- Monad Testnet
-
----
-
-# 📁 Project Structure
-
-```
-├── app/
-│   └── main.py              # Main Streamlit application
-├── services/
-│   ├── expense_service.py   # Data processing & analytics
-│   └── ai_service.py        # AI insights & recommendations
-├── blockchain/
-│   ├── blockchain_service.py
-│   └── FinSightAI.sol       # Smart contract
-├── finsight-ai/
-│   ├── app.py               # Invoice intelligence app
-│   ├── doc_processing.py
-│   └── model_gateway.py
-├── data/
-├── assets/
+```text
+FinSightAI/
+│
+├── app/                    # Main Streamlit application
+├── services/               # AI, analytics, and processing services
+├── blockchain/             # Smart contracts and Web3 integration
+├── data/                   # Sample financial datasets
+├── assets/                 # Images and demo resources
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-# 🌱 Future Improvements
+# 🛠️ Tech Stack
 
-- Bank account integrations
-- Multi-month spending analysis
-- Predictive financial forecasting
-- Budget alerts
-- Financial milestone tracking
+**Frontend:** Streamlit  
+**Programming Language:** Python  
+**Data Analytics:** Pandas, NumPy  
+**Visualization:** Plotly  
+**AI:** IBM watsonx.ai, OpenAI  
+**Document Processing:** IBM Docling  
+**Blockchain:** Solidity, Web3.py, Monad Testnet  
 
 ---
 
-Built using IBM Bob · Made by Kavya Raval · FinSight AI · 2026
+# 🌱 Future Enhancements
+
+- 💳 Bank account integrations
+- 📈 Predictive spending and financial forecasting
+- 🎯 Automated budgeting recommendations
+- 📅 Long-term financial trend analysis
+- 📱 Mobile-friendly financial assistant experience
+
+---
+
+# 👩‍💻 Author Note
+
+Built by **Kavya Raval**  
+Computer Science Student @ Toronto Metropolitan University
+
+Interested in building impactful solutions at the intersection of **Artificial Intelligence, Data Analytics, and Blockchain Technology**.
