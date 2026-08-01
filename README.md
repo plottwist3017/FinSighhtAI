@@ -14,7 +14,7 @@ Instead of only tracking expenses, FinSight AI helps users understand spending b
 
 <!-- Add your project GIF / screenshots here -->
 
-![FinSight AI Demo](assets/demo.gif)
+![FinSight AI Demo](Demo.gif)
 
 ---
 
